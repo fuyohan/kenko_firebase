@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="js/jquery-2.1.3.min.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <title>みんなの健康活動</title>
+</head>
+
+<body class="body">
+
+  <!--Headerエリア--->
+  <header>
+    <div class="top">
+      <div class="top-under">  
+        <h1 class="logo"><a href="./Kenko-top.html"><img src="./img/PAGE LOGO.png" alt="ロゴ" width=100px height=100px ></a></h1>
+        <h1 class="letter">みんなの健康活動<br><div class="small">からだをバランスよく思いやり、楽しくリフレッシュ</div></h1>
+      </div>
+    </div>
+
+    <div class="menu">
+        <ul class=nav>
+          <li class="li"><a href="./index_complete.html">みんなの健康<br>ナレッジシェア</a></li>
+          <li class="li"><a href="">健康<br>スケジューリング</a></li>
+          <li class="li"><a href="">お楽しみ<br>マーケットプレイス</a></li>
+        </ul>
+    </div>
+  </header>
+
+<!-- コンテンツ表示画面 -->
+<div>
+  <div class="contact_area">
+    <div class="form-wrapper">
+      <form name="userForm">
+        <dl class="form-inner">
+          
+          <dt class="form-title check-checkbox"> ニックネーム </dt>
+          <dd class="form-item">
+            <textarea name="" id="uname" class="form-parts"></textarea>
+          </dd>
+          <dt class="form-title check-checkbox"> 最近のあなたの健康生活を教えてください。 </dt>
+          <dd class="form-item">
+            <textarea name="" id="text" class="form-parts"></textarea>
+          </dd>
+          <dt class="form-title check-checkbox"> 写真アップロード </dt>
+          <dd class="form-item">
+            <input type="file" name="example" accept="image/jpeg, image/png">
+          </dd>
+        </dl>
+      </form>
+      <button id="send" class="btn-submit">投稿</button>
+    </div>
+  </div>
+</div>
+
+  <footer class="footer-text-center">
+      <div class="wrapper">
+          <a href="#" class="btn-pagetop" id="btn"><span class="fa fa-angle-up icon-up"></span></a>
+          <small class="copyrights">copyrights 2016-2018 kenko All RIghts Reserved.</small>
+      </div>
+  </footer>
+
+  <!-- ここから上にコードを書く -->
+  <!-- この中に記述していく -->
+
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- JQuery -->
+
+<!--** 以下Firebase **-->
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+  import {getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved}
+        from "https://cdnjs.cloudflare.com/ajax/libs/firebase/9.6.1/firebase-database.min.js"; //講義のリンクをコピーしても作成したプロジェクトとは数字が合わず。9.6.0➡9.6.1に修正した
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "",
+    authDomain: "post-f0442.firebaseapp.com",
+    databaseURL: "https://post-f0442-default-rtdb.firebaseio.com",
+    projectId: "post-f0442",
+    storageBucket: "post-f0442.appspot.com",
+    messagingSenderId: "832149054397",
+    appId: "1:832149054397:web:3c702410e2b8e5a13da8d4"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app); // RealtimeDBに接続
+  const dbRef = ref(db, "chat"); // RealtimeDB内の"chat"を使う
+  
+  //送信処理
+  $("#send").on("click",function(){
+      const msg = {
+          uname: $("#uname").val(),
+          text: $("#text").val()
+        }
+        $("#uname").val("");
+        $("#text").val("");
+        const newPostRef = push(dbRef); // pushできる状態にする
+        set(newPostRef, msg); // DBに値を送信
+    });
+</script>
+</body>
+</html>
